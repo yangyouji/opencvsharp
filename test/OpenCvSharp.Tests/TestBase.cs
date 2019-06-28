@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 
 [assembly: CollectionBehavior(/*MaxParallelThreads = 2, */DisableTestParallelization = true)]
 
@@ -12,9 +13,10 @@ namespace OpenCvSharp.Tests
 {
     public abstract class TestBase
     {
-        private static readonly HttpClient httpClient;
+        private readonly HttpClient httpClient;
+        protected readonly ITestOutputHelper output;
 
-        static TestBase()
+        public TestBase()
         {
             ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
 #if DOTNET_FRAMEWORK
@@ -23,6 +25,17 @@ namespace OpenCvSharp.Tests
 
             httpClient = new HttpClient
             {
+                Timeout = TimeSpan.FromMinutes(5)
+            };
+        }
+
+        public TestBase(ITestOutputHelper output) {
+            ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+#if NET461
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+#endif
+            this.output = output;
+            httpClient = new HttpClient {
                 Timeout = TimeSpan.FromMinutes(5)
             };
         }

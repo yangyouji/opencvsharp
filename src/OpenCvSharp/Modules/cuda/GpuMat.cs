@@ -1044,6 +1044,18 @@ namespace OpenCvSharp.Cuda
         }
 
         /// <summary>
+        /// Pefroms blocking upload data to GpuMat with stream.
+        /// </summary>
+        /// <param name="m"></param>
+        /// <param name="stream"></param>
+        public void Upload(Mat m, Stream stream) {
+            ThrowIfDisposed();
+            NativeMethods.cuda_GpuMat_upload_1(ptr, m.CvPtr, stream.CvPtr);
+            GC.KeepAlive(this);
+            GC.KeepAlive(m);
+        }
+
+        /// <summary>
         /// Downloads data from device to host memory. Blocking calls.
         /// </summary>
         /// <param name="m"></param>
@@ -1051,6 +1063,18 @@ namespace OpenCvSharp.Cuda
         {
             ThrowIfDisposed();
             NativeMethods.cuda_GpuMat_download(ptr, m.CvPtr);
+            GC.KeepAlive(this);
+            GC.KeepAlive(m);
+        }
+
+        /// <summary>
+        /// Downloads data from device to host memory with stream.
+        /// </summary>
+        /// <param name="m"></param>
+        /// <param name="stream"></param>
+        public void Download(Mat m, Stream stream) {
+            ThrowIfDisposed();
+            NativeMethods.cuda_GpuMat_download_1(ptr, m.CvPtr, stream.CvPtr);
             GC.KeepAlive(this);
             GC.KeepAlive(m);
         }

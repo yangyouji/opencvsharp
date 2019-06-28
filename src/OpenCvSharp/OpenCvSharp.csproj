@@ -43,19 +43,19 @@
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net20' ">
-    <DefineConstants>$(DefineConstants);DOTNET_FRAMEWORK;</DefineConstants>
+    <DefineConstants>$(DefineConstants);DOTNET_FRAMEWORK;ENABLED_CUDA</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net40' ">
-    <DefineConstants>$(DefineConstants);DOTNET_FRAMEWORK;</DefineConstants>
+    <DefineConstants>$(DefineConstants);DOTNET_FRAMEWORK;ENABLED_CUDA</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <DefineConstants>$(DefineConstants);DOTNET_FRAMEWORK;</DefineConstants>
+    <DefineConstants>$(DefineConstants);DOTNET_FRAMEWORK;ENABLED_CUDA</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <DefineConstants>$(DefineConstants);netstandard20</DefineConstants>
+    <DefineConstants>TRACE;netstandard20;ENABLED_CUDA</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release-JP' ">

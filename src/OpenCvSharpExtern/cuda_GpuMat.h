@@ -135,6 +135,16 @@ CVAPI(void) cuda_GpuMat_download(GpuMat *obj, cv::Mat *m)
     obj->download(*m);
 }
 
+CVAPI(void) cuda_GpuMat_upload_1(GpuMat *obj, cv::Mat *m , Stream* stream)
+{
+	obj->upload(*m , *stream);
+}
+
+CVAPI(void) cuda_GpuMat_download_1(GpuMat *obj, cv::Mat *m , Stream* stream)
+{
+	obj->download(*m, *stream);
+}
+
 CVAPI(GpuMat*) cuda_GpuMat_row(GpuMat *obj, int y)
 {
     GpuMat ret = obj->row(y);

@@ -83,6 +83,12 @@ namespace OpenCvSharp
         public static extern void cuda_GpuMat_download(IntPtr obj, IntPtr mat);
 
         [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void cuda_GpuMat_upload_1(IntPtr obj, IntPtr mat, IntPtr stream);
+
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void cuda_GpuMat_download_1(IntPtr obj, IntPtr mat, IntPtr stream);
+
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         public static extern IntPtr cuda_GpuMat_row(IntPtr obj, int y);
         [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         public static extern IntPtr cuda_GpuMat_col(IntPtr obj, int x);

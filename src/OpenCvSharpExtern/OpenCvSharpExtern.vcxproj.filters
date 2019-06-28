@@ -378,6 +378,13 @@
     <ClInclude Include="objdetect_QRCodeDetector.h">
       <Filter>Header Files\objdetect</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="cuda_warping.h">
+      <Filter>Header Files\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="cuda_imgproc.h">
+      <Filter>Header Files\cuda</Filter>
+    </ClInclude>
     <ClInclude Include="text_TextDetector.h">
       <Filter>Header Files\text</Filter>
     </ClInclude>
