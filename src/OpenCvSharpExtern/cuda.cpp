@@ -3,3 +3,4 @@
 #include "cuda_GpuMat.h"
 #include "cuda_warping.h"
 #include "cuda_imgproc.h"
+#include "cuda_arithm.h"
