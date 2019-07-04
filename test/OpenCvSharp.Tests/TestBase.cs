@@ -81,6 +81,33 @@ namespace OpenCvSharp.Tests
             }
         }
 
+        protected static void ImageEquals(Mat img1, Mat img2, double abs_error) {
+            if (img1 == null && img2 == null)
+                return;
+            Assert.NotNull(img1);
+            Assert.NotNull(img2);
+            Assert.Equal(img1.Type(), img2.Type());
+            double abs_sum = abs_error * img1.Width * img1.Height;
+
+            using (var comparison = new Mat()) {
+                Cv2.Absdiff(img1, img2, comparison);
+                if (img1.Channels() == 1) {
+                    Assert.False(Cv2.Sum(comparison).Val0 > abs_sum);
+                } else {
+                    var channels = Cv2.Split(comparison);
+                    try {
+                        foreach (var channel in channels) {
+                            Assert.False(Cv2.Sum(channel).Val0 > abs_sum);
+                        }
+                    } finally {
+                        foreach (var channel in channels) {
+                            channel.Dispose();
+                        }
+                    }
+                }
+            }
+        }
+
         protected static void ShowImagesWhenDebugMode(params Mat[] mats)
         {
             if (Debugger.IsAttached)

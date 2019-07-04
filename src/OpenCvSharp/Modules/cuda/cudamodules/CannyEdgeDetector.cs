@@ -4,7 +4,7 @@ namespace OpenCvSharp.Cuda {
     // ReSharper disable InconsistentNaming
 
     /// <summary>
-    /// Creates implementation for cuda::CannyEdgeDetector
+    /// Base class for Canny Edge Detector. :
     /// </summary>
     public class CannyEdgeDetector : Algorithm {
         /// <summary>
@@ -22,9 +22,9 @@ namespace OpenCvSharp.Cuda {
         /// <param name="apperture_size"></param>
         /// <param name="L2gradient"></param>
         /// <returns></returns>
-        public static CannyEdgeDetector Create(
+        public static CannyEdgeDetector create(
             double low_thresh, double high_thresh, int apperture_size = 3, bool L2gradient = false) {
-            IntPtr ptr = NativeMethods.cuda_createCannyEdgeDetector(
+            IntPtr ptr = NativeMethods.cuda_imgproc_createCannyEdgeDetector(
                 low_thresh, high_thresh, apperture_size, L2gradient);
             return new CannyEdgeDetector(ptr);
         }
@@ -48,9 +48,9 @@ namespace OpenCvSharp.Cuda {
         /// <summary>
         /// Finds edges in an image using the @cite Canny86 algorithm.
         /// </summary>
-        /// <param name="image"></param>
-        /// <param name="edges"></param>
-        /// <param name="stream"></param>
+        /// <param name="image">Single-channel 8-bit input image.</param>
+        /// <param name="edges">Output edge map. It has the same size and type as image.</param>
+        /// <param name="stream">Stream for the asynchronous version.</param>
         public virtual void detect(InputArray image, OutputArray edges, Stream stream = null) {
             if (image == null)
                 throw new ArgumentNullException(nameof(image));
@@ -59,7 +59,7 @@ namespace OpenCvSharp.Cuda {
             image.ThrowIfDisposed();
             edges.ThrowIfNotReady();
 
-            NativeMethods.cuda_CannyEdgeDetector_detect(ptr, image.CvPtr, edges.CvPtr, stream?.CvPtr ?? Stream.Null.CvPtr);
+            NativeMethods.cuda_imgproc_CannyEdgeDetector_detect(ptr, image.CvPtr, edges.CvPtr, stream?.CvPtr ?? Stream.Null.CvPtr);
 
             edges.Fix();
             GC.KeepAlive(this);
@@ -68,90 +68,90 @@ namespace OpenCvSharp.Cuda {
         }
 
 
-        //#region Properties
+        #region Properties
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public int History {
-        //    get {
-        //        ThrowIfDisposed();
-        //        var res = NativeMethods.bgsegm_BackgroundSubtractorMOG_getHistory(ptr);
-        //        GC.KeepAlive(this);
-        //        return res;
-        //    }
-        //    set {
-        //        ThrowIfDisposed();
-        //        NativeMethods.bgsegm_BackgroundSubtractorMOG_setHistory(ptr, value);
-        //        GC.KeepAlive(this);
-        //    }
-        //}
+        /// <summary>
+        /// 
+        /// </summary>
+        public double LowThreshold {
+            get {
+                ThrowIfDisposed();
+                var res = NativeMethods.cuda_imgproc_CannyEdgeDetector_getLowThreshold(ptr);
+                GC.KeepAlive(this);
+                return res;
+            }
+            set {
+                ThrowIfDisposed();
+                NativeMethods.cuda_imgproc_CannyEdgeDetector_setLowThreshold(ptr, value);
+                GC.KeepAlive(this);
+            }
+        }
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public int NMixtures {
-        //    get {
-        //        ThrowIfDisposed();
-        //        var res = NativeMethods.bgsegm_BackgroundSubtractorMOG_getNMixtures(ptr);
-        //        GC.KeepAlive(this);
-        //        return res;
-        //    }
-        //    set {
-        //        ThrowIfDisposed();
-        //        NativeMethods.bgsegm_BackgroundSubtractorMOG_setNMixtures(ptr, value);
-        //        GC.KeepAlive(this);
-        //    }
-        //}
+        /// <summary>
+        /// 
+        /// </summary>
+        public double HighThreshold {
+            get {
+                ThrowIfDisposed();
+                var res = NativeMethods.cuda_imgproc_CannyEdgeDetector_getHighThreshold(ptr);
+                GC.KeepAlive(this);
+                return res;
+            }
+            set {
+                ThrowIfDisposed();
+                NativeMethods.cuda_imgproc_CannyEdgeDetector_setHighThreshold(ptr, value);
+                GC.KeepAlive(this);
+            }
+        }
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public double BackgroundRatio {
-        //    get {
-        //        ThrowIfDisposed();
-        //        var res = NativeMethods.bgsegm_BackgroundSubtractorMOG_getBackgroundRatio(ptr);
-        //        GC.KeepAlive(this);
-        //        return res;
-        //    }
-        //    set {
-        //        ThrowIfDisposed();
-        //        NativeMethods.bgsegm_BackgroundSubtractorMOG_setBackgroundRatio(ptr, value);
-        //        GC.KeepAlive(this);
-        //    }
-        //}
+        /// <summary>
+        /// 
+        /// </summary>
+        public int AppertureSize {
+            get {
+                ThrowIfDisposed();
+                var res = NativeMethods.cuda_imgproc_CannyEdgeDetector_getAppertureSize(ptr);
+                GC.KeepAlive(this);
+                return res;
+            }
+            set {
+                ThrowIfDisposed();
+                NativeMethods.cuda_imgproc_CannyEdgeDetector_setAppertureSize(ptr, value);
+                GC.KeepAlive(this);
+            }
+        }
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public double NoiseSigma {
-        //    get {
-        //        ThrowIfDisposed();
-        //        var res = NativeMethods.bgsegm_BackgroundSubtractorMOG_getNoiseSigma(ptr);
-        //        GC.KeepAlive(this);
-        //        return res;
-        //    }
-        //    set {
-        //        ThrowIfDisposed();
-        //        NativeMethods.bgsegm_BackgroundSubtractorMOG_setNoiseSigma(ptr, value);
-        //        GC.KeepAlive(this);
-        //    }
-        //}
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool L2Gradient {
+            get {
+                ThrowIfDisposed();
+                var res = NativeMethods.cuda_imgproc_CannyEdgeDetector_getL2Gradient(ptr);
+                GC.KeepAlive(this);
+                return res;
+            }
+            set {
+                ThrowIfDisposed();
+                NativeMethods.cuda_imgproc_CannyEdgeDetector_setL2Gradient(ptr, value);
+                GC.KeepAlive(this);
+            }
+        }
 
-        //#endregion
+        #endregion
 
         internal class Ptr : OpenCvSharp.Ptr {
             public Ptr(IntPtr ptr) : base(ptr) {
             }
 
             public override IntPtr Get() {
-                var res = NativeMethods.cuda_Ptr_CannyEdgeDetector_get(ptr);
+                var res = NativeMethods.cuda_imgproc_Ptr_CannyEdgeDetector_get(ptr);
                 GC.KeepAlive(this);
                 return res;
             }
 
             protected override void DisposeUnmanaged() {
-                NativeMethods.cuda_Ptr_CannyEdgeDetector_delete(ptr);
+                NativeMethods.cuda_imgproc_Ptr_CannyEdgeDetector_delete(ptr);
                 base.DisposeUnmanaged();
             }
         }

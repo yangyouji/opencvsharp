@@ -69,7 +69,7 @@ namespace OpenCvSharp.Tests {
             Mat src = Image("lenna.png", ImreadModes.Grayscale);
             gpumat.Upload(src);
 
-            Cuda.CannyEdgeDetector canny = Cuda.CannyEdgeDetector.Create(100, 50);
+            Cuda.CannyEdgeDetector canny = Cuda.CannyEdgeDetector.create(100, 50);
             //bool aaaa = canny.Empty;
             //output.WriteLine(canny.ToString());
             output.WriteLine("out: {0}", canny.CvPtr);
@@ -90,7 +90,7 @@ namespace OpenCvSharp.Tests {
             Mat src = Image("lenna.png", ImreadModes.Grayscale);
             gpumat.Upload(src);
 
-            Cuda.CannyEdgeDetector canny = Cuda.CannyEdgeDetector.Create(100, 50);
+            Cuda.CannyEdgeDetector canny = Cuda.CannyEdgeDetector.create(100, 50);
 
             canny.detect(gpumat, gpumat_des);
 

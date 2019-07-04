@@ -95,9 +95,8 @@ namespace OpenCvSharp.Tests.cuda {
                 Cv2.Remap(src, dst, xmap, ymap, InterpolationFlags.Nearest, BorderTypes.Constant);
 
                 ShowImagesWhenDebugMode(dst_gold, dst);
-                //ImageEquals(dst_gold, dst);
+                ImageEquals(dst_gold, dst, 2e-2);
             }
-
         }
 
         [Fact]
