@@ -186,7 +186,63 @@ namespace OpenCvSharp {
         public static extern int cuda_imgproc_HoughCirclesDetector_getMaxCircles(IntPtr ptr);
         [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         public static extern void cuda_imgproc_HoughCirclesDetector_setMaxCircles(IntPtr ptr, int maxCircles);
+        //
 
+        // CornernessCriteria
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern IntPtr cuda_imgproc_createHarrisCorner(int srcType, int blockSize, int ksize, double k, int borderType);
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern IntPtr cuda_imgproc_createMinEigenValCorner(int srcType, int blockSize, int ksize, int borderType);
+
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void cuda_imgproc_HoughCirclesDetector_compute(IntPtr self, IntPtr src, IntPtr dst, IntPtr stream);
+
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void cuda_imgproc_Ptr_CornernessCriteria_delete(IntPtr obj);
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern IntPtr cuda_imgproc_Ptr_CornernessCriteria_get(IntPtr ptr);
+        //
+
+        // CornersDetector
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern IntPtr cuda_imgproc_createGoodFeaturesToTrackDetector(int srcType, int maxCorners, double qualityLevel, double minDistance,
+            int blockSize, bool useHarrisDetector, double harrisK);
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void cuda_imgproc_CornersDetector_detect(IntPtr self, IntPtr image, IntPtr corners, IntPtr mask, IntPtr stream);
+
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void cuda_imgproc_Ptr_CornersDetector_delete(IntPtr obj);
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern IntPtr cuda_imgproc_Ptr_CornersDetector_get(IntPtr ptr);
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void cuda_imgproc_CornersDetector_downloadResults(IntPtr obj, IntPtr d_corners, IntPtr c_corners, IntPtr stream);
+        //
+
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void cuda_imgproc_meanShiftFiltering(IntPtr src, IntPtr dst, int sp, int sr, TermCriteria criteria, IntPtr stream);
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void cuda_imgproc_meanShiftProc(IntPtr src, IntPtr dstr, IntPtr dstsp, int sp, int sr, TermCriteria criteria, IntPtr stream);
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void cuda_imgproc_meanShiftSegmentation(IntPtr src, IntPtr dst, int sp, int sr, int minsize, TermCriteria criteria, IntPtr stream);
+        //
+
+        // TemplateMatching
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern IntPtr cuda_imgproc_createTemplateMatching(int srcType, int method, Size user_block_size);
+
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void cuda_imgproc_TemplateMatching_match(IntPtr self, IntPtr image, IntPtr templ, IntPtr result, IntPtr stream);
+
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void cuda_imgproc_Ptr_TemplateMatching_delete(IntPtr obj);
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern IntPtr cuda_imgproc_Ptr_TemplateMatching_get(IntPtr ptr);
+        //
+
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void cuda_imgproc_bilateralFilter(IntPtr src, IntPtr dst, int kernel_size, float sigma_color, float sigma_spatial, int borderMode, IntPtr stream);
+        [DllImport(DllExtern, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void cuda_imgproc_blendLinear(IntPtr img1, IntPtr img2, IntPtr weights1, IntPtr weights2, IntPtr result, IntPtr stream);
     }
 
 }

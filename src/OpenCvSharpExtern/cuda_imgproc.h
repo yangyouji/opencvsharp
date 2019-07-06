@@ -377,6 +377,123 @@ CVAPI(void) cuda_imgproc_HoughCirclesDetector_setMaxCircles(HoughCirclesDetector
 {
 	ptr->setMaxCircles(maxCircles);
 }
+//
+
+// CornernessCriteria
+CVAPI(cv::Ptr<CornernessCriteria>*) cuda_imgproc_createHarrisCorner(int srcType, int blockSize, int ksize, double k, int borderType)
+{
+	cv::Ptr<CornernessCriteria> ptr = cv::cuda::createHarrisCorner(srcType, blockSize, ksize, k, borderType);
+	return new cv::Ptr<CornernessCriteria>(ptr);
+}
+
+CVAPI(cv::Ptr<CornernessCriteria>*) cuda_imgproc_createMinEigenValCorner(int srcType, int blockSize, int ksize, int borderType)
+{
+	cv::Ptr<CornernessCriteria> ptr = cv::cuda::createMinEigenValCorner(srcType, blockSize, ksize, borderType);
+	return new cv::Ptr<CornernessCriteria>(ptr);
+}
+
+CVAPI(void) cuda_imgproc_HoughCirclesDetector_compute(CornernessCriteria* obj, cv::_InputArray* src, cv::_OutputArray* dst, Stream* stream)
+{
+	obj->compute(*src, *dst, *stream);
+}
+
+CVAPI(void) cuda_imgproc_Ptr_CornernessCriteria_delete(cv::Ptr<CornernessCriteria>* obj)
+{
+	delete obj;
+}
+
+CVAPI(CornernessCriteria*) cuda_imgproc_Ptr_CornernessCriteria_get(cv::Ptr<CornernessCriteria>* ptr)
+{
+	return ptr->get();
+}
+//
+
+// CornersDetector
+CVAPI(cv::Ptr<CornersDetector>*) cuda_imgproc_createGoodFeaturesToTrackDetector(int srcType, int maxCorners, double qualityLevel, double minDistance,
+	int blockSize, bool useHarrisDetector, double harrisK)
+{
+	cv::Ptr<CornersDetector> ptr = cv::cuda::createGoodFeaturesToTrackDetector(srcType, maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, harrisK);
+	return new cv::Ptr<CornersDetector>(ptr);
+}
+
+CVAPI(void) cuda_imgproc_CornersDetector_detect(CornersDetector* obj, cv::_InputArray* image, cv::_OutputArray* corners, cv::_InputArray* mask, Stream* stream)
+{
+	if (mask == nullptr)
+		obj->detect(*image, *corners, cv::noArray(), *stream);
+	else
+		obj->detect(*image, *corners, *mask, *stream);
+}
+
+CVAPI(void) cuda_imgproc_CornersDetector_downloadResults(HoughCirclesDetector* obj, cv::_InputArray* _d_corners, std::vector<cv::Vec2f>* c_corners, Stream* stream)
+{
+	GpuMat d_corners = _d_corners->getGpuMat();
+	if (*stream)
+		d_corners.download(*c_corners, *stream);
+	else
+		d_corners.download(*c_corners);
+}
+
+CVAPI(void) cuda_imgproc_Ptr_CornersDetector_delete(cv::Ptr<CornersDetector>* obj)
+{
+	delete obj;
+}
+
+CVAPI(CornersDetector*) cuda_imgproc_Ptr_CornersDetector_get(cv::Ptr<CornersDetector>* ptr)
+{
+	return ptr->get();
+}
+//
+
+// CvTermCriteria criteria
+CVAPI(void) cuda_imgproc_meanShiftFiltering(cv::_InputArray* src, cv::_OutputArray* dst, int sp, int sr, CvTermCriteria criteria, Stream* stream)
+{
+	cv::cuda::meanShiftFiltering(*src, *dst, sp, sr, criteria, *stream);
+}
+
+CVAPI(void) cuda_imgproc_meanShiftProc(cv::_InputArray* src, cv::_OutputArray* dstr, cv::_OutputArray* dstsp, int sp, int sr, CvTermCriteria criteria, Stream* stream)
+{
+	cv::cuda::meanShiftProc(*src, *dstr, *dstsp, sp, sr, criteria, *stream);
+}
+
+CVAPI(void) cuda_imgproc_meanShiftSegmentation(cv::_InputArray* src, cv::_OutputArray* dst, int sp, int sr, int minsize, CvTermCriteria criteria, Stream* stream)
+{
+	cv::cuda::meanShiftSegmentation(*src, *dst, sp, sr, minsize, criteria, *stream);
+}
+//
+
+// TemplateMatching
+CVAPI(cv::Ptr<TemplateMatching>*) cuda_imgproc_createTemplateMatching(int srcType, int method, MyCvSize user_block_size)
+{
+	cv::Ptr<TemplateMatching> ptr = cv::cuda::createTemplateMatching(srcType, method, cpp(user_block_size));
+	return new cv::Ptr<TemplateMatching>(ptr);
+}
+
+CVAPI(void) cuda_imgproc_TemplateMatching_match(TemplateMatching* obj, cv::_InputArray* image, cv::_OutputArray* templ, cv::_OutputArray* result, Stream* stream)
+{
+		obj->match(*image, *templ, *result, *stream);
+}
+
+CVAPI(void) cuda_imgproc_Ptr_TemplateMatching_delete(cv::Ptr<TemplateMatching>* obj)
+{
+	delete obj;
+}
+
+CVAPI(TemplateMatching*) cuda_imgproc_Ptr_TemplateMatching_get(cv::Ptr<TemplateMatching>* ptr)
+{
+	return ptr->get();
+}
+//
+CVAPI(void) cuda_imgproc_bilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, int kernel_size
+	, float sigma_color, float sigma_spatial,int borderMode , Stream* stream)
+{
+	cv::cuda::bilateralFilter(*src, *dst, kernel_size, sigma_color, sigma_spatial, borderMode, *stream);
+}
+
+CVAPI(void) cuda_imgproc_blendLinear(cv::_InputArray* img1, cv::_InputArray* img2, cv::_InputArray* weights1
+	, cv::_InputArray* weights2, cv::_OutputArray* result, Stream* stream)
+{
+	cv::cuda::blendLinear(*img1, *img2, *weights1, *weights2, *result, *stream);
+}
 
 
 #endif

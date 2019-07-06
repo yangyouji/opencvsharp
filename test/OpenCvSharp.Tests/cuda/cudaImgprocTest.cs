@@ -326,5 +326,135 @@ namespace OpenCvSharp.Tests.cuda {
             }
         }
 
+        //[Fact]
+        //public void cuda_CornerHarris() {
+        //    Mat src = Image("lenna.png", ImreadModes.Grayscale);
+        //    Size size = src.Size();
+
+        //    double k = 0.5;
+
+        //    using (GpuMat g_src = new GpuMat(size, src.Type()))
+        //    using (GpuMat d_dst = new GpuMat()) {
+        //        g_src.Upload(src);
+
+        //        CornernessCriteria harris = CornernessCriteria.createHarrisCorner(src.Type(), 3, 0, k,BorderTypes.Reflect101);
+
+        //        harris.compute(g_src, d_dst);
+
+
+        //        Mat dst_gold = new Mat();
+        //    }
+        //}
+
+        [Fact]
+        public void cuda_CornersDetector() {
+            Mat src = Image("blob/shapes3.png", ImreadModes.Grayscale);
+            Size size = src.Size();
+
+            using (GpuMat g_src = new GpuMat(size, src.Type()))
+            using (GpuMat d_dst = new GpuMat()) {
+                g_src.Upload(src);
+
+                CornersDetector corner = CornersDetector.create(src.Type(), 100, 0.01, 5, 3, true, 0.04);
+
+                corner.detect(g_src, d_dst);
+
+                Point2f[] points;
+                corner.downloadResults(d_dst, out points);
+
+                Point2f[] points_gold = Cv2.GoodFeaturesToTrack(src, 100, 0.01, 5, null, 3, true, 0.04);
+
+                Mat src_gold = src.Clone();
+
+                for (int n = 0;n<points_gold.Length;n++) {
+                    Cv2.Circle(src_gold, new Point(points_gold[n].X, points_gold[n].Y), 2, Scalar.Gray, -1);
+                }
+
+                for (int n = 0; n < points.Length; n++) {
+                    Cv2.Circle(src, new Point(points[n].X, points[n].Y), 2, Scalar.Gray, -1);
+                }
+
+                //output.WriteLine("points: {0}", points.Length);
+                //output.WriteLine("points_gold: {0}", points_gold.Length);
+
+                ShowImagesWhenDebugMode(src, src_gold);
+
+            }
+        }
+
+        [Fact]
+        public void cuda_MeanShift() {
+            Mat temp = Image("lenna.png", ImreadModes.AnyColor);
+            Mat src = temp.CvtColor(ColorConversionCodes.RGB2RGBA);
+            Size size = src.Size();
+
+            int spatialRad = 30;
+            int colorRad = 30;
+
+            using (GpuMat g_src = new GpuMat(size, MatType.CV_8UC4))
+            using (GpuMat d_dst = new GpuMat()) {
+                g_src.Upload(src);
+
+                Cuda.cuda.meanShiftFiltering(g_src, d_dst, spatialRad, colorRad);
+
+                Mat dst_gold = new Mat();
+                Cv2.PyrMeanShiftFiltering(temp, dst_gold, spatialRad, colorRad);
+
+                Mat dst = new Mat();
+                d_dst.Download(dst);
+
+                Mat result = new Mat();
+                Cv2.CvtColor(dst, result, ColorConversionCodes.RGBA2RGB);
+
+                ImageEquals(result, dst_gold, 3);
+                ShowImagesWhenDebugMode(dst, dst_gold);
+            }
+        }
+
+        [Fact]
+        public void cuda_MatchTemplate() {
+            Mat image = Image("lenna.png", ImreadModes.Grayscale);
+            Mat templ = image.RowRange(60, 80).ColRange(60,80);
+            Size size = image.Size();
+
+            using (GpuMat g_src = new GpuMat(size, image.Type()))
+            using (GpuMat d_dst = new GpuMat()) {
+                g_src.Upload(image);
+
+                TemplateMatching alg = TemplateMatching.create(g_src.Type(), TemplateMatchModes.CCoeff);
+
+                GpuMat g_templ = new GpuMat();
+                g_templ.Upload(templ);
+                alg.match(g_src, g_templ, d_dst);
+
+                Mat dst_gold = new Mat();
+                Cv2.MatchTemplate(image, templ, dst_gold, TemplateMatchModes.CCoeff);
+
+                ImageEquals(g_templ, templ);
+                ShowImagesWhenDebugMode(g_templ, templ);
+            }
+        }
+
+        [Fact]
+        public void cuda_BilateralFilter() {
+            Mat src = Mat.Zeros(128, 128, MatType.CV_8UC1);
+            Size size = src.Size();
+            int kernel_size = 5;
+            float sigma_color = 10f;
+            float sigma_spatial = 3.5f;
+
+            using (GpuMat g_src = new GpuMat(size, src.Type()))
+            using (GpuMat d_dst = new GpuMat()) {
+                g_src.Upload(src);
+
+                Cuda.cuda.bilateralFilter(g_src,d_dst,kernel_size,sigma_color,sigma_spatial);
+            
+                Mat dst_gold = new Mat();
+                Cv2.BilateralFilter(src, dst_gold, kernel_size, sigma_color, sigma_spatial);
+
+                ImageEquals(dst_gold, d_dst);
+                ShowImagesWhenDebugMode(src, d_dst);
+            }
+        }
     }
 }
